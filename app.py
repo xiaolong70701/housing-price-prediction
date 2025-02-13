@@ -34,7 +34,7 @@ for column in label_map.columns:
 # 載入 Google Maps API Key
 load_dotenv()
 # ✅ 使用環境變數獲取 API_KEY
-API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
+API_KEY = st.secrets["GOOGLE_MAPS_API_KEY"]
 
 # ✅ 確保 API_KEY 存在
 if not API_KEY:
