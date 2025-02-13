@@ -6,3 +6,12 @@ scipy
 python-dotenv
 pickle
 xgboost
+pandas
+plotly
+seaborn
+matplotlib
+scikit-learn
+pydeck
+joblib
+geopandas
+leafmap
