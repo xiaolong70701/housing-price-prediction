@@ -8,6 +8,8 @@ import json
 from scipy.spatial import KDTree
 from dotenv import load_dotenv
 
+os.system("pip install xgboost")
+
 # 載入 XGBoost 模型
 with open("xgb_model_v4.pkl", "rb") as file:
     model = pickle.load(file)
