@@ -6,6 +6,7 @@ scipy
 python-dotenv
 xgboost
 geopandas
+scikit-learn
 seaborn
 matplotlib
 pydeck
