@@ -6,3 +6,10 @@ scipy
 python-dotenv
 xgboost
 geopandas
+seaborn
+matplotlib
+pydeck
+joblib
+lightgbm
+geopandas
+leafmap
