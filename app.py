@@ -16,6 +16,9 @@ from draw import draw_map, draw_bar
 load_dotenv()
 API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 
+st.set_page_config(page_title="房價預測系統", layout="wide")
+st.title("🏠 房價預測模型")
+
 if not API_KEY and "GOOGLE_MAPS_API_KEY" in st.secrets:
     API_KEY = st.secrets["GOOGLE_MAPS_API_KEY"]
 
@@ -145,32 +148,56 @@ def encode_categorical_features(df):
     return df
 
 # Streamlit UI
-st.title("🏡 房價預測系統")
 
 # 使用者選擇模型
-model_choice = st.sidebar.radio("選擇預測模型", ["XGBoost", "LightGBM"])
+model_choice = st.radio("選擇預測模型", ["XGBoost", "LightGBM"])
 
-address_input = st.sidebar.text_input("地址（可選填，如果知道房屋地址）")
+address_input = st.text_input("地址（可選填，如果知道房屋地址）")
 
-city = st.sidebar.selectbox("縣市別", list(city_districts.keys()))
-district = st.sidebar.selectbox("鄉鎮市區", city_districts[city])
+# 優化輸入欄位顯示，分為兩個區塊
+col1, col2 = st.columns(2)  # 將兩欄設為 50% 寬度
 
-transaction_year = st.sidebar.number_input("交易年份", min_value=2000, max_value=2025, value=2023)
-house_age = st.sidebar.number_input("房屋年齡", min_value=0.1, max_value=100.0, value=20.0)
-area_tsubo = st.sidebar.number_input("交易面積（坪）", min_value=5.0, max_value=500.0, value=30.0)
-area_sqm = area_tsubo * 3.30578
-parking_type = st.sidebar.selectbox("車位類別", encoding_dict["車位類別"].keys())
-management = st.sidebar.selectbox("有無管理組織", encoding_dict["有無管理組織"].keys())
-elevator = st.sidebar.selectbox("有無電梯", encoding_dict["電梯"].keys())
-building_type = st.sidebar.selectbox("建物型態", encoding_dict["建物型態"].keys())
-rooms = st.sidebar.number_input("建物現況格局-房", min_value=1, max_value=10, value=3)
-living_rooms = st.sidebar.number_input("建物現況格局-廳", min_value=0, max_value=5, value=1)
-bathrooms = st.sidebar.number_input("建物現況格局-衛", min_value=1, max_value=5, value=1)
-at_floor = st.sidebar.number_input("所在樓層", min_value=1, max_value=100, value=1)
-total_floor = st.sidebar.number_input("總樓層", min_value=1, max_value=100, value=1)
+# 在第一欄輸入欄位
+with col1:
+    city = st.selectbox("縣市別", list(city_districts.keys()))
+    transaction_year = st.number_input("交易年份", min_value=2000, max_value=2025, value=2023)
+    house_age = st.number_input("房屋年齡", min_value=0.1, max_value=100.0, value=20.0)
+    parking_type = st.selectbox("車位類別", encoding_dict["車位類別"].keys())
+    management = st.selectbox("有無管理組織", encoding_dict["有無管理組織"].keys())
+    elevator = st.selectbox("有無電梯", encoding_dict["電梯"].keys())
+    rooms = st.number_input("建物現況格局-房", min_value=1, max_value=10, value=3)
+
+# 在第二欄輸入欄位
+with col2:
+    district = st.selectbox("鄉鎮市區", city_districts[city])
+    area_tsubo = st.number_input("交易面積（坪）", min_value=5.0, max_value=500.0, value=30.0)
+    area_sqm = area_tsubo * 3.30578  # 將坪數轉換為平方公尺
+    building_type = st.selectbox("建物型態", encoding_dict["建物型態"].keys())
+    living_rooms = st.number_input("建物現況格局-廳", min_value=0, max_value=5, value=1)
+    bathrooms = st.number_input("建物現況格局-衛", min_value=1, max_value=5, value=1)
+    at_floor = st.number_input("所在樓層", min_value=1, max_value=100, value=1)
+    total_floor = st.number_input("總樓層", min_value=1, max_value=100, value=1)
+
+# 計算樓層比例
 floor_ratio = at_floor / total_floor
 
-if st.sidebar.button("預測價格"):
+
+# transaction_year = st.sidebar.number_input("交易年份", min_value=2000, max_value=2025, value=2023)
+# house_age = st.sidebar.number_input("房屋年齡", min_value=0.1, max_value=100.0, value=20.0)
+# area_tsubo = st.sidebar.number_input("交易面積（坪）", min_value=5.0, max_value=500.0, value=30.0)
+# area_sqm = area_tsubo * 3.30578
+# parking_type = st.sidebar.selectbox("車位類別", encoding_dict["車位類別"].keys())
+# management = st.sidebar.selectbox("有無管理組織", encoding_dict["有無管理組織"].keys())
+# elevator = st.sidebar.selectbox("有無電梯", encoding_dict["電梯"].keys())
+# building_type = st.sidebar.selectbox("建物型態", encoding_dict["建物型態"].keys())
+# rooms = st.sidebar.number_input("建物現況格局-房", min_value=1, max_value=10, value=3)
+# living_rooms = st.sidebar.number_input("建物現況格局-廳", min_value=0, max_value=5, value=1)
+# bathrooms = st.sidebar.number_input("建物現況格局-衛", min_value=1, max_value=5, value=1)
+# at_floor = st.sidebar.number_input("所在樓層", min_value=1, max_value=100, value=1)
+# total_floor = st.sidebar.number_input("總樓層", min_value=1, max_value=100, value=1)
+# floor_ratio = at_floor / total_floor
+
+if st.button("預測價格"):
     address = address_input if address_input.strip() else f"{city}{district}"
 
     predicted_prices = {}  # 存放每個區的預測結果
