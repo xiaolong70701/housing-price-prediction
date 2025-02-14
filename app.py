@@ -156,7 +156,7 @@ city = st.sidebar.selectbox("縣市別", list(city_districts.keys()))
 district = st.sidebar.selectbox("鄉鎮市區", city_districts[city])
 
 transaction_year = st.sidebar.number_input("交易年份", min_value=2000, max_value=2025, value=2023)
-house_age = st.sidebar.number_input("房屋年齡", min_value=0, max_value=100, value=20)
+house_age = st.sidebar.number_input("房屋年齡", min_value=0.1, max_value=100.0, value=20.0)
 area_tsubo = st.sidebar.number_input("交易面積（坪）", min_value=5.0, max_value=500.0, value=30.0)
 area_sqm = area_tsubo * 3.30578
 parking_type = st.sidebar.selectbox("車位類別", encoding_dict["車位類別"].keys())
@@ -166,7 +166,9 @@ building_type = st.sidebar.selectbox("建物型態", encoding_dict["建物型態
 rooms = st.sidebar.number_input("建物現況格局-房", min_value=1, max_value=10, value=3)
 living_rooms = st.sidebar.number_input("建物現況格局-廳", min_value=0, max_value=5, value=1)
 bathrooms = st.sidebar.number_input("建物現況格局-衛", min_value=1, max_value=5, value=1)
-floor_ratio = st.sidebar.number_input("樓高比", min_value=0.1, max_value=1.5, value=0.8)
+at_floor = st.sidebar.number_input("所在樓層", min_value=1, max_value=100, value=1)
+total_floor = st.sidebar.number_input("總樓層", min_value=1, max_value=100, value=1)
+floor_ratio = at_floor / total_floor
 
 if st.sidebar.button("預測價格"):
     address = address_input if address_input.strip() else f"{city}{district}"
@@ -230,12 +232,12 @@ if st.sidebar.button("預測價格"):
     house_gdf["price_wan"] = house_gdf["place"].map(lambda x: predicted_prices.get(x, {}).get("price_wan", None))
     house_gdf["unit_price_wan"] = house_gdf["place"].map(lambda x: predicted_prices.get(x, {}).get("unit_price_wan", None))
     
-    target_unit_price = np.exp(predicted_prices[district]['unit_price_wan']) * 3.30578
     target_total_price = predicted_prices[district]['price_wan']
+    target_unit_price = target_total_price / area_tsubo
 
     st.subheader("📊 預測結果")
     if model_choice == "XGBoost":
-        st.write(f"💰 **預測單價**： {target_unit_price:,.0f} 元")
+        st.write(f"💰 **預測單價**： {target_unit_price:,.0f} 元/坪")
         st.write(f"💰 **預測總價**： {target_total_price:,.0f} 元")
     else:
         st.write(f"💰 **預測區間**： {predicted_total_price_low:,.0f} 元 ~ {predicted_total_price_high:,.0f} 元")
