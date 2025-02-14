@@ -16,7 +16,11 @@ from draw import draw_map, draw_bar
 load_dotenv()
 API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 
-st.set_page_config(page_title="房價預測系統", layout="wide")
+st.set_page_config(
+    page_title="房價預測系統", 
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
 if not API_KEY and "GOOGLE_MAPS_API_KEY" in st.secrets:
     API_KEY = st.secrets["GOOGLE_MAPS_API_KEY"]
@@ -176,6 +180,17 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
+
+st.sidebar.title("📌 關於本系統")
+st.sidebar.write("""
+歡迎使用**房價預測系統**！這是一個基於**機器學習模型**的房價評估工具，能夠根據您輸入的房屋資訊，預測合理的房價區間，並提供市場參考價格。本系統採用了 `XGBoost` 和 `LightGBM` 兩種強大的預測模型，並結合**生活機能分析**，讓房價評估更精準。
+                 
+✅ **AI 驅動的房價預測**：透過機器學習模型分析數據，提供高準確率的房價預測。  
+✅ **多維度影響因子**：不僅考慮房屋基本資訊，還納入 **生活機能、交通便利性、環境因素** 等關鍵變數。  
+✅ **價格區間與市場中位數**：使用 LightGBM 模型時，系統將提供 **最低、最高及中位數價格**，幫助您更精確評估。    
+                 
+如果有任何建議或指教，歡迎來信：[xiaolong70701@gmail.com](mailto:xiaolong70701@gmail.com)
+""")
 
 # 使用者選擇模型
 with st.container():
