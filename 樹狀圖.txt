@@ -1,0 +1,49 @@
+.
+├── HouseFolder.txt
+├── app.py
+├── average_price_per_sqm.json
+├── main.py
+├── processing
+│   ├── DataCleaner.py
+│   ├── FacilityProcessor.py
+│   ├── GeocodeFetcher.py
+│   ├── HousePriceCrawler.py
+│   ├── HousePriceProcesser.py
+│   ├── LiveDataProcesser.py
+│   ├── PriceProcessor.py
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-310.pyc
+│   │   └── priceCrawler.cpython-310.pyc
+│   └── model.py
+├── raw
+│   └── live_data
+│       ├── edu_data
+│       │   └── 全台各級學校分布.csv
+│       ├── entert_data
+│       │   ├── 全台醫事機構_診所.csv
+│       │   └── 全台醫事機構_醫院.csv
+│       ├── food_data
+│       │   ├── 全國3大速食業資料集.csv
+│       │   ├── 全國5大超商資料集.csv
+│       │   ├── 公司登記餐廳餐館.csv
+│       │   └── 商業登記餐廳餐館.csv
+│       └── transp_data
+│           ├── Kaosiung_MRT.json
+│           ├── Northern_MRT.csv
+│           ├── Taichung_MRT.csv
+│           ├── taiwan-high-speed-rail.csv
+│           ├── 車站基本資料集.json
+│           ├── 公路客運站牌資料.csv
+│           ├── 公路客運站牌資料.xml
+│           └── 大台北捷運車站位置.csv
+├── requirements.txt
+├── tests
+├── utils
+├── xgb_model_v4.pkl
+├── 樹狀圖.txt
+├── 機器學習-標籤編碼對照表v2.csv
+├── 生活機能資料.csv
+└── 縣市別鄉鎮市區.json
+
+11 directories, 36 files
