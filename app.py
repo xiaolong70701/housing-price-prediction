@@ -222,7 +222,7 @@ if st.sidebar.button("預測價格"):
             predicted_total_price = pred_price_per_sqm * area_sqm
 
             predicted_prices[district_name] = {
-                "price_wan": round(predicted_total_price / 10_000, 3),
+                "price_wan": predicted_total_price,
                 "unit_price_wan": round(pred_price_per_sqm / 10_000, 3)
             }
 
@@ -230,13 +230,13 @@ if st.sidebar.button("預測價格"):
     house_gdf["price_wan"] = house_gdf["place"].map(lambda x: predicted_prices.get(x, {}).get("price_wan", None))
     house_gdf["unit_price_wan"] = house_gdf["place"].map(lambda x: predicted_prices.get(x, {}).get("unit_price_wan", None))
     
-    target_unit_price = np.exp(predicted_prices[district]['unit_price_wan']) * 3.30578 / 10000
+    target_unit_price = np.exp(predicted_prices[district]['unit_price_wan']) * 3.30578
     target_total_price = predicted_prices[district]['price_wan']
 
     st.subheader("📊 預測結果")
     if model_choice == "XGBoost":
-        st.write(f"💰 **預測單價**： {target_unit_price:.3f} 萬元")
-        st.write(f"💰 **預測總價**： {target_total_price} 萬元")
+        st.write(f"💰 **預測單價**： {target_unit_price:,.0f} 元")
+        st.write(f"💰 **預測總價**： {target_total_price:,.0f} 元")
     else:
         st.write(f"💰 **預測區間**： {predicted_total_price_low:,.0f} 元 ~ {predicted_total_price_high:,.0f} 元")
         st.write(f"💰 **中位數預測**： {predicted_total_price_mid:,.0f} 元")
