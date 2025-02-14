@@ -8,6 +8,7 @@ import json
 from scipy.spatial import KDTree
 from dotenv import load_dotenv
 import geopandas as gpd
+import lightgbm as lgb
 import pydeck as pdk
 from draw import draw_map, draw_bar
 
